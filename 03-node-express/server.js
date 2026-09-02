@@ -1,269 +1,411 @@
 const express = require("express");
 const cors = require("cors");
-require("dotenv").config();
-
-const fs = require("fs/promises");
+const fs = require("fs");
 const path = require("path");
-
 const { GoogleGenAI } = require("@google/genai");
 const { tavily } = require("@tavily/core");
+require("dotenv").config();
 
 const app = express();
+const PORT = 3000;
 
-// ==========================================
-// MIDDLEWARE
-// ==========================================
+// ========================================
+// Middleware
+// ========================================
 
 app.use(cors());
 app.use(express.json());
 
-// ==========================================
-// AI CLIENT
-// ==========================================
+// ========================================
+// Frontend
+// ========================================
+
+const frontendDirectory = path.join(
+    __dirname,
+    "..",
+    "01-javascript-foundations"
+);
+
+app.use(express.static(frontendDirectory));
+
+app.get("/", (req, res) => {
+    res.sendFile(
+        path.join(frontendDirectory, "index.html")
+    );
+});
+
+// ========================================
+// AI Services
+// ========================================
 
 const ai = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY,
+    apiKey: process.env.GEMINI_API_KEY
 });
-
-// ==========================================
-// SEARCH CLIENT
-// ==========================================
 
 const tvly = tavily({
-  apiKey: process.env.TAVILY_API_KEY,
+    apiKey: process.env.TAVILY_API_KEY
 });
 
-// ==========================================
-// RESEARCH OUTPUT DIRECTORY
-// ==========================================
+// ========================================
+// Research Output Directory
+// ========================================
 
-const outputDirectory = path.join(__dirname, "research-output");
+const researchOutputDirectory = path.join(
+    __dirname,
+    "research-output"
+);
 
-// ==========================================
-// SAVE RESEARCH AS OBSIDIAN MARKDOWN
-// ==========================================
+if (!fs.existsSync(researchOutputDirectory)) {
+    fs.mkdirSync(researchOutputDirectory, {
+        recursive: true
+    });
+}
 
-async function saveResearchNote(topic, report, sources) {
-  // Create research-output folder if it doesn't exist
-  await fs.mkdir(outputDirectory, {
-    recursive: true,
-  });
+// ========================================
+// Health Check
+// ========================================
 
-  // Convert topic into a safe filename
-  const safeTopic = topic
-    .replace(/[^a-z0-9]+/gi, "-")
-    .replace(/^-+|-+$/g, "")
-    .toLowerCase();
+app.get("/api/hello", (req, res) => {
+    res.json({
+        message:
+            "Research Assistant backend is running."
+    });
+});
 
-  // Create timestamp
-  const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+// ========================================
+// Research Endpoint
+// ========================================
 
-  const filename = `${safeTopic}-${timestamp}.md`;
+app.post("/api/research", async (req, res) => {
 
-  const filePath = path.join(outputDirectory, filename);
+    const topic = req.body.topic?.trim();
 
-  // Convert sources into Markdown links
-  const sourceMarkdown = sources
-    .map((source) => {
-      return `- [${source.title}](${source.url})`;
-    })
-    .join("\n");
+    if (!topic) {
+        return res.status(400).json({
+            error: "Research topic is required."
+        });
+    }
 
-  // Create the Markdown document
-  const markdown = `---
-title: "${topic}"
-created: "${new Date().toISOString()}"
+    console.log("\n================================");
+    console.log("Research topic:", topic);
+    console.log("================================\n");
+
+    try {
+
+        // ========================================
+        // STEP 1 — Search Web
+        // ========================================
+
+        console.log("Searching the web...");
+
+        const searchResponse =
+            await tvly.search(topic, {
+                maxResults: 5,
+                searchDepth: "advanced",
+                includeAnswer: false
+            });
+
+        const searchResults =
+            searchResponse.results || [];
+
+        console.log(
+            `Sources found: ${searchResults.length}`
+        );
+
+        if (searchResults.length === 0) {
+            return res.status(404).json({
+                error:
+                    "No useful sources were found."
+            });
+        }
+
+        // ========================================
+        // STEP 2 — Normalize Sources
+        // ========================================
+
+        const sources = searchResults.map(
+            (source, index) => {
+
+                return {
+                    id: index + 1,
+
+                    title:
+                        source.title ||
+                        `Source ${index + 1}`,
+
+                    url: source.url,
+
+                    content:
+                        source.content ||
+                        source.rawContent ||
+                        "",
+
+                    score:
+                        source.score ?? null
+                };
+            }
+        );
+
+        // ========================================
+        // STEP 3 — Build Research Context
+        // ========================================
+
+        const researchContext =
+            sources
+                .map((source) => {
+
+                    return `
+SOURCE ${source.id}
+
+Title:
+${source.title}
+
+URL:
+${source.url}
+
+Content:
+${source.content}
+`;
+
+                })
+                .join(
+                    "\n-------------------------\n"
+                );
+
+        // ========================================
+        // STEP 4 — Generate AI Research
+        // ========================================
+
+        console.log(
+            "Generating AI research..."
+        );
+
+        const prompt = `
+You are an expert research synthesizer.
+
+Research topic:
+"${topic}"
+
+You have been given information retrieved
+from multiple web sources.
+
+Create a clear, factual, well-structured
+research report based ONLY on the provided
+sources.
+
+IMPORTANT RULES:
+
+1. Use ONLY information contained in the
+   provided sources.
+
+2. Do not invent facts, statistics,
+   examples, or citations.
+
+3. Every important factual claim should
+   include a citation such as [Source 1].
+
+4. If sources disagree, explicitly
+   mention the disagreement.
+
+5. Do not pretend a source says something
+   it does not say.
+
+6. Prefer information supported by
+   multiple sources.
+
+7. Keep the report concise but useful.
+
+8. Do NOT create a Sources section.
+   The application will create it.
+
+9. Use Markdown.
+
+Use exactly this structure:
+
+## Overview
+
+Explain the topic clearly.
+
+## Key Findings
+
+Present the most important findings.
+
+## Applications & Developments
+
+Explain important applications,
+developments, or examples.
+
+## Why It Matters
+
+Explain why the topic is important.
+
+## Challenges & Limitations
+
+Explain risks, limitations,
+disagreements, or unresolved issues.
+
+## Conclusion
+
+Give a concise synthesis.
+
+WEB SOURCES:
+
+${researchContext}
+`;
+
+        const response =
+            await ai.models.generateContent({
+                model: "gemini-3.5-flash",
+                contents: prompt
+            });
+
+        const researchReport =
+            response.text;
+
+        if (!researchReport) {
+            throw new Error(
+                "Gemini returned an empty response."
+            );
+        }
+
+        console.log(
+            "AI research generated successfully."
+        );
+
+        // ========================================
+        // STEP 5 — Create Filename
+        // ========================================
+
+        const timestamp =
+            new Date().toISOString();
+
+        const safeTopic =
+            topic
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, "-")
+                .replace(/^-+|-+$/g, "")
+                .substring(0, 80);
+
+        const filename =
+            `${safeTopic}-${timestamp
+                .replace(/[:.]/g, "-")}.md`;
+
+        const filePath =
+            path.join(
+                researchOutputDirectory,
+                filename
+            );
+
+        // ========================================
+        // STEP 6 — Obsidian Frontmatter
+        // ========================================
+
+        const frontmatter = `---
+title: "${topic.replace(/"/g, '\\"')}"
+created: "${timestamp}"
 type: research
 tags:
   - research
   - ai-generated
 ---
 
-# ${topic}
+`;
 
-${report}
+        // ========================================
+        // STEP 7 — Sources
+        // ========================================
+
+        const sourcesMarkdown =
+            sources
+                .map((source) => {
+                    return `- [${source.title}](${source.url})`;
+                })
+                .join("\n");
+
+        // ========================================
+        // STEP 8 — Create Obsidian Note
+        // ========================================
+
+        const obsidianNote =
+            frontmatter +
+            researchReport +
+            `
+
+---
 
 ## Sources
 
-${sourceMarkdown}
+${sourcesMarkdown}
 
 ---
 
 *Generated by Research Assistant*
 `;
 
-  // Write Markdown file
-  await fs.writeFile(filePath, markdown, "utf8");
+        fs.writeFileSync(
+            filePath,
+            obsidianNote,
+            "utf8"
+        );
 
-  console.log("\nObsidian note created:");
-  console.log(filePath);
+        console.log(
+            "\nObsidian note created:"
+        );
 
-  return {
-    filename: filename,
-    filePath: filePath,
-  };
-}
+        console.log(filePath);
 
-// ==========================================
-// TEST ROUTE
-// ==========================================
+        // ========================================
+        // STEP 9 — Send Result to Frontend
+        // ========================================
 
-app.get("/api/hello", (req, res) => {
-  res.json({
-    message: "Hello from my Express backend!",
-  });
-});
+        res.json({
 
-// ==========================================
-// RESEARCH ROUTE
-// ==========================================
+            message: researchReport,
 
-app.post("/api/research", async (req, res) => {
-  try {
-    const topic = req.body.topic;
+            sources:
+                sources.map((source) => {
 
-    // Validate input
-    if (!topic) {
-      return res.status(400).json({
-        message: "Research topic is required.",
-      });
+                    return {
+                        id: source.id,
+                        title: source.title,
+                        url: source.url,
+                        score: source.score
+                    };
+
+                }),
+
+            note: {
+                filename: filename,
+                markdown: obsidianNote
+            }
+
+        });
+
+    } catch (error) {
+
+        console.error(
+            "\nResearch error:",
+            error
+        );
+
+        res.status(500).json({
+
+            error:
+                error.message ||
+                "Research failed."
+
+        });
     }
-
-    console.log("\n================================");
-    console.log("Research topic:", topic);
-    console.log("================================");
-
-    // ==========================================
-    // STEP 1: SEARCH THE WEB
-    // ==========================================
-
-    console.log("\nSearching the web...");
-
-    const searchResponse = await tvly.search(topic, {
-      search_depth: "basic",
-
-      max_results: 5,
-    });
-
-    console.log("Sources found:", searchResponse.results.length);
-
-    // ==========================================
-    // STEP 2: FORMAT SOURCES FOR GEMINI
-    // ==========================================
-
-    const sources = searchResponse.results
-      .map((result, index) => {
-        return `
-SOURCE ${index + 1}
-
-Title:
-${result.title}
-
-URL:
-${result.url}
-
-Content:
-${result.content}
-`;
-      })
-      .join("\n-------------------------\n");
-
-    // ==========================================
-    // STEP 3: CREATE GEMINI RESEARCH PROMPT
-    // ==========================================
-
-    const prompt = `
-You are an evidence-based research assistant.
-
-Research topic:
-${topic}
-
-Below are web sources retrieved specifically for this research.
-
-${sources}
-
-Using ONLY the information provided in these sources:
-
-1. Give a concise overview.
-2. Identify the most important findings.
-3. Explain important developments or applications.
-4. Explain why the topic matters.
-5. Mention disagreements or limitations if the sources contain them.
-6. Do not invent facts that are not supported by the sources.
-7. Add source citations using [Source 1], [Source 2], etc.
-8. End with a short conclusion.
-
-Write a clear, structured research report using Markdown.
-`;
-
-    // ==========================================
-    // STEP 4: GEMINI SYNTHESIS
-    // ==========================================
-
-    console.log("\nGenerating AI research...");
-
-    const response = await ai.models.generateContent({
-      model: "gemini-3.5-flash",
-
-      contents: prompt,
-    });
-
-    const report = response.text;
-
-    console.log("AI research generated successfully.");
-
-    // ==========================================
-    // STEP 5: PREPARE SOURCE INFORMATION
-    // ==========================================
-
-    const sourcesForNote = searchResponse.results.map((result, index) => {
-      return {
-        id: index + 1,
-        title: result.title,
-        url: result.url,
-      };
-    });
-
-    // ==========================================
-    // STEP 6: CREATE OBSIDIAN NOTE
-    // ==========================================
-
-    const note = await saveResearchNote(topic, report, sourcesForNote);
-
-    // ==========================================
-    // STEP 7: SEND RESULT TO FRONTEND
-    // ==========================================
-
-    res.json({
-      message: report,
-
-      sources: sourcesForNote,
-
-      note: {
-        filename: note.filename,
-      },
-    });
-  } catch (error) {
-    console.error("\nResearch error:", error);
-
-    res.status(500).json({
-      message: "Research failed",
-
-      error: error.message,
-    });
-  }
 });
 
-// ==========================================
-// SERVE GENERATED OBSIDIAN FILES
-// ==========================================
+// ========================================
+// Start Server
+// ========================================
 
-app.use("/research-output", express.static(outputDirectory));
+app.listen(PORT, () => {
 
-// ==========================================
-// START SERVER
-// ==========================================
+    console.log(
+        `Server running at http://localhost:${PORT}`
+    );
 
-app.listen(3000, () => {
-  console.log("Server running at http://localhost:3000");
 });

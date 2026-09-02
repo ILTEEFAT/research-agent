@@ -1,160 +1,22 @@
-<!doctype html>
-
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
 
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
 
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0"
-    />
+    >
 
     <title>Research Assistant</title>
 
-
-    <style>
-
-        body {
-
-            font-family: Arial, sans-serif;
-
-            max-width: 1000px;
-
-            margin: 40px auto;
-
-            padding: 0 20px;
-
-        }
-
-
-        h1 {
-
-            margin-bottom: 20px;
-
-        }
-
-
-        .search-box {
-
-            display: flex;
-
-            gap: 10px;
-
-        }
-
-
-        input {
-
-            flex: 1;
-
-            padding: 12px;
-
-            font-size: 16px;
-
-            border: 1px solid #999;
-
-            border-radius: 5px;
-
-        }
-
-
-        button {
-
-            padding: 12px 24px;
-
-            font-size: 16px;
-
-            cursor: pointer;
-
-        }
-
-
-        #statusDisplay {
-
-            margin-top: 20px;
-
-            font-weight: bold;
-
-        }
-
-
-        #report {
-
-            margin-top: 25px;
-
-        }
-
-
-        .report-box {
-
-            background: #f5f5f5;
-
-            padding: 25px;
-
-            border-radius: 10px;
-
-            line-height: 1.7;
-
-            white-space: pre-wrap;
-
-            overflow-wrap: break-word;
-
-        }
-
-
-        .sources {
-
-            margin-top: 30px;
-
-        }
-
-
-        .source {
-
-            margin: 12px 0;
-
-            padding: 12px;
-
-            border: 1px solid #ddd;
-
-            border-radius: 8px;
-
-        }
-
-
-        .source a {
-
-            text-decoration: none;
-
-        }
-
-
-        #downloadArea {
-
-            margin-top: 20px;
-
-        }
-
-
-        .download-button {
-
-            display: inline-block;
-
-            padding: 12px 18px;
-
-            border: 1px solid #333;
-
-            border-radius: 6px;
-
-            text-decoration: none;
-
-            font-weight: bold;
-
-        }
-
-    </style>
+    <!-- Main stylesheet -->
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
 
 </head>
 
@@ -162,37 +24,458 @@
 <body>
 
 
-    <h1>🔬 Research Assistant</h1>
+    <!-- =====================================================
+         MAIN APPLICATION
+         ===================================================== -->
+
+    <main class="container">
 
 
-    <div class="search-box">
+        <!-- =================================================
+             HEADER
+             ================================================= -->
 
-        <input
-            type="text"
-            id="researchQuery"
-            placeholder="Enter research topic..."
-        />
+        <header class="hero">
 
-
-        <button id="researchButton">
-            Research
-        </button>
-
-    </div>
+            <div class="hero-label">
+                AI / RESEARCH / 01
+            </div>
 
 
-    <p id="statusDisplay">
-        Status: Nothing Started
-    </p>
+            <h1>
+                Research<br>
+                Assistant
+            </h1>
 
 
-    <div id="report"></div>
+            <p class="subtitle">
+                Turn the web into evidence you can use.
+                Search, synthesize, verify and export your
+                research directly into Obsidian.
+            </p>
+
+        </header>
 
 
-    <div id="downloadArea"></div>
+
+        <!-- =================================================
+             SEARCH AREA
+             ================================================= -->
+
+        <section class="search-box">
+
+            <div class="search-label">
+                WHAT DO YOU WANT TO RESEARCH?
+            </div>
 
 
-    <script src="script.js"></script>
+            <div class="search-row">
+
+                <input
+                    id="researchQuery"
+                    type="text"
+                    placeholder="e.g. The future of robotics in healthcare"
+                    autocomplete="off"
+                >
+
+
+                <button
+                    type="button"
+                    id="researchButton"
+                >
+
+                    <span id="buttonText">
+                        Research
+                    </span>
+
+
+                    <span
+                        id="loadingSpinner"
+                        class="hidden"
+                        aria-hidden="true"
+                    >
+                        ⟳
+                    </span>
+
+
+                    <span class="button-arrow">
+                        →
+                    </span>
+
+                </button>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             STATUS
+             ================================================= -->
+
+        <div
+            id="statusDisplay"
+            class="status"
+            aria-live="polite"
+        >
+            Ready to research.
+        </div>
+
+
+
+        <!-- =================================================
+             STATS
+             ================================================= -->
+
+        <section
+            id="stats"
+            class="stats hidden"
+        >
+
+
+            <!-- Sources -->
+
+            <div class="stat-card">
+
+                <span class="stat-number">
+
+                    <span id="sourceCount">
+                        0
+                    </span>
+
+                </span>
+
+
+                <span class="stat-label">
+                    SOURCES
+                </span>
+
+            </div>
+
+
+
+            <!-- Research status -->
+
+            <div class="stat-card stat-card-wide">
+
+                <span class="stat-label">
+                    RESEARCH STATUS
+                </span>
+
+
+                <span class="stat-value">
+                    Evidence-backed
+                </span>
+
+            </div>
+
+
+
+            <!-- AI -->
+
+            <div class="stat-card">
+
+                <span class="stat-number">
+                    AI
+                </span>
+
+
+                <span class="stat-label">
+                    SYNTHESIS
+                </span>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             RESEARCH REPORT
+             ================================================= -->
+
+        <section
+            id="reportSection"
+            class="card report-card hidden"
+        >
+
+
+            <div class="section-topline">
+
+                <span>
+                    RESEARCH REPORT
+                </span>
+
+
+                <span class="section-number">
+                    01
+                </span>
+
+            </div>
+
+
+
+            <div class="report-heading">
+
+
+                <div class="report-icon">
+                    ✎
+                </div>
+
+
+                <div>
+
+                    <div class="eyebrow">
+                        EVIDENCE-BACKED SYNTHESIS
+                    </div>
+
+
+                    <h2 id="reportTitle">
+                        Research Report
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- AI generated report -->
+
+            <div
+                id="report"
+                class="report"
+            ></div>
+
+
+
+            <!-- Report actions -->
+
+            <div class="actions">
+
+                <button
+                    type="button"
+                    id="copyReportButton"
+                >
+                    Copy Report
+                    <span>↗</span>
+                </button>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             SOURCES
+             ================================================= -->
+
+        <section
+            id="sourcesSection"
+            class="card sources-card hidden"
+        >
+
+
+            <div class="section-topline">
+
+                <span>
+                    SOURCES
+                </span>
+
+
+                <span class="section-number">
+                    02
+                </span>
+
+            </div>
+
+
+
+            <div class="section-heading-row">
+
+
+                <div>
+
+                    <div class="eyebrow">
+                        WEB RESEARCH
+                    </div>
+
+
+                    <h2>
+                        Evidence behind the report
+                    </h2>
+
+                </div>
+
+
+
+                <!-- IMPORTANT:
+                     This ID is now unique.
+                     JS uses sourceCount for the stats above.
+                -->
+
+                <div class="source-count-badge">
+
+                    <span id="sourceCountBadge">
+                        0
+                    </span>
+
+                    SOURCES
+
+                </div>
+
+            </div>
+
+
+
+            <p
+                id="sourceSummary"
+                class="source-summary"
+            >
+                0 sources
+            </p>
+
+
+
+            <!-- Sources generated by JavaScript -->
+
+            <div
+                id="sources"
+                class="sources-grid"
+            ></div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             OBSIDIAN EXPORT
+             ================================================= -->
+
+        <section
+            id="exportSection"
+            class="card export-card hidden"
+        >
+
+
+            <div class="section-topline">
+
+                <span>
+                    OBSIDIAN EXPORT
+                </span>
+
+
+                <span class="section-number">
+                    03
+                </span>
+
+            </div>
+
+
+
+            <div class="export-layout">
+
+
+                <!-- Export information -->
+
+                <div class="export-copy">
+
+                    <div class="eyebrow">
+                        READY TO TAKE WITH YOU
+                    </div>
+
+
+                    <h2>
+                        Your research,<br>
+                        ready for Obsidian.
+                    </h2>
+
+
+                    <p>
+                        The research has been packaged into
+                        Markdown with frontmatter and source
+                        references.
+                    </p>
+
+
+                    <button
+                        type="button"
+                        id="copyMarkdownButton"
+                    >
+                        Copy Obsidian Markdown
+                        <span>↗</span>
+                    </button>
+
+                </div>
+
+
+
+                <!-- Markdown preview -->
+
+                <div class="markdown-preview">
+
+
+                    <div class="preview-header">
+
+                        <span class="preview-dot"></span>
+
+                        <span class="preview-dot"></span>
+
+                        <span class="preview-dot"></span>
+
+
+                        <span class="preview-title">
+                            research.md
+                        </span>
+
+                    </div>
+
+
+
+                    <pre
+                        id="markdownDisplay"
+                    ></pre>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             FOOTER
+             ================================================= -->
+
+        <footer class="footer">
+
+            <span>
+                RESEARCH ASSISTANT
+            </span>
+
+
+            <span>
+                WEB → AI → EVIDENCE → OBSIDIAN
+            </span>
+
+        </footer>
+
+
+    </main>
+
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+         ===================================================== -->
+
+    <script
+        src="script.js"
+        defer
+    ></script>
 
 
 </body>

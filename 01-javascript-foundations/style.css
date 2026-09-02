@@ -1,0 +1,1749 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+
+/* ============================================================
+   RESEARCH ASSISTANT
+   CREATIVE EDITORIAL / MAGAZINE STYLE
+   ============================================================ */
+
+
+/* ============================================================
+   COLOR SYSTEM
+   ============================================================ */
+
+:root {
+
+    --crimson: #b95069;
+    --crimson-dark: #913c53;
+    --crimson-deep: #713044;
+
+    --paper: #fffaf0;
+    --paper-warm: #f7eedf;
+    --paper-dark: #eee2cf;
+
+    --ink: #111111;
+    --brown: #71372e;
+
+    --yellow: #f5d85d;
+    --yellow-light: #ffe99a;
+
+    --green: #4d806d;
+    --green-light: #82aa98;
+
+    --blue: #62a5d5;
+    --blue-light: #91c5e7;
+
+    --pink: #d982a1;
+
+    --red: #d6534c;
+
+    --white: #ffffff;
+
+    --black: #111111;
+
+    --border: 3px solid var(--black);
+
+    --shadow: 8px 8px 0 var(--black);
+}
+
+
+/* ============================================================
+   RESET
+   ============================================================ */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+
+    min-height: 100vh;
+
+    background: var(--crimson);
+
+    color: var(--ink);
+
+    font-family: "DM Sans", sans-serif;
+
+    overflow-x: hidden;
+}
+
+
+/* ============================================================
+   BODY DECORATION
+   ============================================================ */
+
+body::before {
+    content: "";
+
+    position: fixed;
+
+    inset: 0;
+
+    pointer-events: none;
+
+    background-image:
+        radial-gradient(
+            rgba(255,255,255,0.12) 1px,
+            transparent 1px
+        );
+
+    background-size: 18px 18px;
+
+    opacity: 0.18;
+
+    z-index: -1;
+}
+
+
+/* ============================================================
+   MAIN PAGE
+   ============================================================ */
+
+.container {
+
+    width: min(
+        1160px,
+        calc(100% - 80px)
+    );
+
+    margin: 70px auto 110px;
+
+    background: var(--paper);
+
+    border: var(--border);
+
+    box-shadow: 12px 12px 0 var(--black);
+
+    position: relative;
+
+    overflow: visible;
+}
+
+
+/* ============================================================
+   PLAYFUL DECORATIVE OBJECTS
+   ============================================================ */
+
+.container::before {
+
+    content: "✦";
+
+    position: absolute;
+
+    left: -38px;
+
+    top: 105px;
+
+    width: 64px;
+
+    height: 64px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: var(--yellow);
+
+    border: var(--border);
+
+    font-size: 30px;
+
+    transform: rotate(-8deg);
+
+    z-index: 20;
+}
+
+
+.container::after {
+
+    content: "✎";
+
+    position: absolute;
+
+    right: -34px;
+
+    top: 470px;
+
+    width: 62px;
+
+    height: 62px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: var(--blue);
+
+    border: var(--border);
+
+    border-radius: 50%;
+
+    font-size: 26px;
+
+    transform: rotate(8deg);
+
+    z-index: 20;
+}
+
+
+/* ============================================================
+   HERO
+   ============================================================ */
+
+.hero {
+
+    padding: 55px 58px 48px;
+
+    background: var(--paper);
+
+    position: relative;
+
+    border-bottom: var(--border);
+}
+
+
+/* little top label */
+
+.hero-label {
+
+    display: inline-block;
+
+    margin-bottom: 18px;
+
+    padding: 6px 11px;
+
+    background: var(--black);
+
+    color: var(--paper);
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    letter-spacing: 2px;
+
+    transform: rotate(-1deg);
+}
+
+
+/* ============================================================
+   HERO TITLE
+   ============================================================ */
+
+.hero h1 {
+
+    margin: 0;
+
+    color: var(--brown);
+
+    font-family: "Space Grotesk", sans-serif;
+
+    font-size: clamp(
+        58px,
+        8vw,
+        94px
+    );
+
+    line-height: 0.86;
+
+    letter-spacing: -6px;
+
+    font-weight: 700;
+
+    max-width: 800px;
+}
+
+
+/* ============================================================
+   HERO SUBTITLE
+   ============================================================ */
+
+.hero .subtitle {
+
+    margin: 28px 0 0;
+
+    padding: 0;
+
+    max-width: 720px;
+
+    color: var(--brown);
+
+    font-size: 17px;
+
+    line-height: 1.65;
+
+    font-weight: 500;
+}
+
+
+/* ============================================================
+   SEARCH AREA
+   ============================================================ */
+
+.search-box {
+
+    padding: 32px 58px 38px;
+
+    background: var(--yellow);
+
+    position: relative;
+
+    border-bottom: var(--border);
+}
+
+
+/* search label */
+
+.search-label {
+
+    margin-bottom: 12px;
+
+    color: var(--black);
+
+    font-family: "Space Grotesk", sans-serif;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    letter-spacing: 1.5px;
+}
+
+
+/* search row */
+
+.search-row {
+
+    display: flex;
+
+    width: 100%;
+}
+
+
+/* ============================================================
+   INPUT
+   ============================================================ */
+
+#researchQuery {
+
+    flex: 1;
+
+    min-width: 0;
+
+    height: 68px;
+
+    padding: 0 22px;
+
+    background: var(--paper);
+
+    color: var(--black);
+
+    border: var(--border);
+
+    border-right: none;
+
+    border-radius: 0;
+
+    outline: none;
+
+    font-family: "DM Sans", sans-serif;
+
+    font-size: 18px;
+
+    font-weight: 600;
+
+    transition: 0.2s ease;
+}
+
+
+#researchQuery::placeholder {
+
+    color: #98776e;
+
+    font-weight: 500;
+}
+
+
+#researchQuery:focus {
+
+    background: var(--white);
+
+    box-shadow:
+        inset 0 0 0 3px var(--pink);
+}
+
+
+/* ============================================================
+   RESEARCH BUTTON
+   ============================================================ */
+
+#researchButton {
+
+    width: 185px;
+
+    height: 68px;
+
+    padding: 0 20px;
+
+    background: var(--crimson);
+
+    color: var(--paper);
+
+    border: var(--border);
+
+    border-radius: 0;
+
+    font-family: "Space Grotesk", sans-serif;
+
+    font-size: 17px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 10px;
+
+    transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease,
+        background 0.15s ease;
+}
+
+
+#researchButton:hover {
+
+    background: var(--crimson-dark);
+
+    transform: translate(-4px, -4px);
+
+    box-shadow: 6px 6px 0 var(--black);
+}
+
+
+#researchButton:active {
+
+    transform: translate(0, 0);
+
+    box-shadow: none;
+}
+
+
+#researchButton:disabled {
+
+    opacity: 0.65;
+
+    cursor: wait;
+
+    transform: none;
+
+    box-shadow: none;
+}
+
+
+.button-arrow {
+
+    font-size: 21px;
+
+    line-height: 1;
+}
+
+
+/* ============================================================
+   LOADING SPINNER
+   ============================================================ */
+
+#loadingSpinner {
+
+    display: inline-block;
+
+    animation: spin 0.8s linear infinite;
+
+    font-size: 18px;
+}
+
+
+@keyframes spin {
+
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* ============================================================
+   STATUS
+   ============================================================ */
+
+.status {
+
+    min-height: 56px;
+
+    padding: 16px 58px;
+
+    display: flex;
+
+    align-items: center;
+
+    background: var(--paper-warm);
+
+    color: var(--brown);
+
+    border-bottom: var(--border);
+
+    font-size: 14px;
+
+    font-weight: 700;
+}
+
+
+/* ============================================================
+   HIDDEN
+   ============================================================ */
+
+.hidden {
+
+    display: none !important;
+}
+
+
+/* ============================================================
+   STATS
+   ============================================================ */
+
+.stats {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr
+        2fr
+        1fr;
+
+    border-bottom: var(--border);
+}
+
+
+.stat-card {
+
+    min-height: 130px;
+
+    padding: 22px 25px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    background: var(--pink);
+
+    border-right: var(--border);
+}
+
+
+.stat-card:nth-child(2) {
+
+    background: var(--green);
+
+    color: var(--paper);
+}
+
+
+.stat-card:nth-child(3) {
+
+    background: var(--blue);
+
+    border-right: none;
+}
+
+
+.stat-number {
+
+    font-family: "Space Grotesk", sans-serif;
+
+    font-size: 36px;
+
+    font-weight: 700;
+
+    line-height: 1;
+}
+
+
+.stat-value {
+
+    margin-top: 7px;
+
+    font-family: "Space Grotesk", sans-serif;
+
+    font-size: 20px;
+
+    font-weight: 700;
+}
+
+
+.stat-label {
+
+    margin-top: 8px;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+}
+
+
+/* ============================================================
+   ALL RESULT CARDS
+   ============================================================ */
+
+.card {
+
+    margin: 0;
+
+    padding: 42px 45px;
+
+    background: var(--paper);
+
+    border-bottom: var(--border);
+
+    position: relative;
+}
+
+
+/* ============================================================
+   SECTION TOPLINE
+   ============================================================ */
+
+.section-topline {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding-bottom: 14px;
+
+    margin-bottom: 28px;
+
+    border-bottom: 2px solid var(--black);
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 2px;
+}
+
+
+.section-number {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 31px;
+
+    height: 31px;
+
+    background: var(--yellow);
+
+    border: 2px solid var(--black);
+
+    font-size: 11px;
+
+    letter-spacing: 0;
+
+    transform: rotate(3deg);
+}
+
+
+/* ============================================================
+   EYEBROW
+   ============================================================ */
+
+.eyebrow {
+
+    margin-bottom: 8px;
+
+    color: var(--brown);
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+}
+
+
+/* ============================================================
+   REPORT HEADING
+   ============================================================ */
+
+.report-heading {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 20px;
+
+    margin-bottom: 35px;
+}
+
+
+.report-icon {
+
+    width: 58px;
+
+    height: 58px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: var(--blue);
+
+    border: var(--border);
+
+    border-radius: 50%;
+
+    font-size: 25px;
+
+    transform: rotate(-7deg);
+}
+
+
+.report-heading h2,
+.section-heading-row h2,
+.export-copy h2 {
+
+    margin: 0;
+
+    color: var(--brown);
+
+    font-family: "Space Grotesk", sans-serif;
+
+    font-size: clamp(
+        28px,
+        4vw,
+        43px
+    );
+
+    line-height: 1;
+
+    letter-spacing: -2px;
+}
+
+
+/* ============================================================
+   REPORT CONTENT
+   ============================================================ */
+
+.report {
+
+    color: var(--ink);
+
+    font-size: 17px;
+
+    line-height: 1.8;
+
+    max-width: 930px;
+}
+
+
+/* Markdown headings */
+
+.report h1 {
+
+    margin: 0 0 25px;
+
+    padding-bottom: 14px;
+
+    color: var(--brown);
+
+    font-family: "Space Grotesk", sans-serif;
+
+    font-size: 38px;
+
+    line-height: 1.05;
+
+    letter-spacing: -1.5px;
+
+    border-bottom: 2px solid var(--black);
+}
+
+
+.report h2 {
+
+    margin: 42px 0 16px;
+
+    padding: 11px 15px;
+
+    display: inline-block;
+
+    background: var(--yellow);
+
+    color: var(--black);
+
+    border: 2px solid var(--black);
+
+    font-family: "Space Grotesk", sans-serif;
+
+    font-size: 24px;
+
+    line-height: 1.1;
+
+    letter-spacing: -0.5px;
+
+    transform: rotate(-1deg);
+}
+
+
+.report h3 {
+
+    margin: 30px 0 12px;
+
+    color: var(--brown);
+
+    font-family: "Space Grotesk", sans-serif;
+
+    font-size: 20px;
+}
+
+
+.report p {
+
+    margin: 0 0 22px;
+}
+
+
+.report ul {
+
+    margin: 15px 0 25px;
+
+    padding: 0;
+
+    list-style: none;
+}
+
+
+.report li {
+
+    margin: 10px 0;
+
+    padding: 14px 17px;
+
+    background: var(--paper-warm);
+
+    border-left: 6px solid var(--crimson);
+
+    font-size: 16px;
+}
+
+
+.report li::before {
+
+    content: "→";
+
+    margin-right: 10px;
+
+    color: var(--crimson);
+
+    font-weight: 800;
+}
+
+
+/* citations */
+
+.citation {
+
+    display: inline-block;
+
+    margin: 0 2px;
+
+    padding: 2px 7px;
+
+    background: var(--pink);
+
+    color: var(--black);
+
+    border: 1.5px solid var(--black);
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    line-height: 1.4;
+
+    vertical-align: middle;
+
+    transform: rotate(-1deg);
+}
+
+
+/* horizontal line */
+
+.report hr {
+
+    margin: 35px 0;
+
+    border: none;
+
+    border-top: 3px dashed var(--black);
+}
+
+
+/* ============================================================
+   REPORT ACTIONS
+   ============================================================ */
+
+.actions {
+
+    display: flex;
+
+    gap: 12px;
+
+    margin-top: 35px;
+
+    padding-top: 25px;
+
+    border-top: 2px dashed #ad9284;
+}
+
+
+.actions button {
+
+    min-height: 49px;
+
+    padding: 0 20px;
+
+    background: var(--yellow);
+
+    color: var(--black);
+
+    border: 2px solid var(--black);
+
+    border-radius: 0;
+
+    font-family: "Space Grotesk", sans-serif;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+
+.actions button:hover {
+
+    transform: translate(-3px, -3px);
+
+    box-shadow: 4px 4px 0 var(--black);
+}
+
+
+/* ============================================================
+   SOURCES SECTION
+   ============================================================ */
+
+.sources-card {
+
+    background: var(--paper);
+}
+
+
+.section-heading-row {
+
+    display: flex;
+
+    align-items: flex-end;
+
+    justify-content: space-between;
+
+    gap: 30px;
+
+    margin-bottom: 10px;
+}
+
+
+.source-count-badge {
+
+    flex-shrink: 0;
+
+    padding: 12px 15px;
+
+    background: var(--green);
+
+    color: var(--paper);
+
+    border: 2px solid var(--black);
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 1px;
+}
+
+
+.source-count-badge span {
+
+    font-family: "Space Grotesk", sans-serif;
+
+    font-size: 24px;
+
+    margin-right: 5px;
+}
+
+
+.source-summary {
+
+    margin: 15px 0 25px;
+
+    color: var(--brown);
+
+    font-size: 13px;
+
+    font-weight: 600;
+}
+
+
+/* ============================================================
+   SOURCE GRID
+   ============================================================ */
+
+.sources-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 18px;
+}
+
+
+/* ============================================================
+   SOURCE CARD
+   ============================================================ */
+
+.source-card {
+
+    min-height: 155px;
+
+    padding: 22px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: flex-start;
+
+    text-decoration: none;
+
+    color: var(--black);
+
+    border: var(--border);
+
+    position: relative;
+
+    transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+
+/* colorful magazine blocks */
+
+.source-card:nth-child(4n + 1) {
+
+    background: var(--yellow);
+}
+
+
+.source-card:nth-child(4n + 2) {
+
+    background: var(--pink);
+}
+
+
+.source-card:nth-child(4n + 3) {
+
+    background: var(--green-light);
+}
+
+
+.source-card:nth-child(4n + 4) {
+
+    background: var(--blue-light);
+}
+
+
+.source-card:hover {
+
+    transform: translate(-5px, -5px);
+
+    box-shadow: 6px 6px 0 var(--black);
+}
+
+
+/* number */
+
+.source-number {
+
+    width: 35px;
+
+    height: 35px;
+
+    margin-bottom: 18px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: var(--paper);
+
+    border: 2px solid var(--black);
+
+    font-family: "Space Grotesk", sans-serif;
+
+    font-size: 15px;
+
+    font-weight: 700;
+
+    border-radius: 50%;
+}
+
+
+/* source title */
+
+.source-title {
+
+    margin-bottom: 10px;
+
+    color: var(--black);
+
+    font-family: "Space Grotesk", sans-serif;
+
+    font-size: 17px;
+
+    font-weight: 700;
+
+    line-height: 1.25;
+}
+
+
+/* source URL */
+
+.source-url {
+
+    margin-top: auto;
+
+    color: var(--brown);
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    line-height: 1.4;
+
+    overflow-wrap: anywhere;
+}
+
+
+/* ============================================================
+   OBSIDIAN EXPORT
+   ============================================================ */
+
+.export-card {
+
+    background: var(--paper-warm);
+}
+
+
+.export-layout {
+
+    display: grid;
+
+    grid-template-columns:
+        0.85fr
+        1.15fr;
+
+    gap: 35px;
+
+    align-items: stretch;
+}
+
+
+.export-copy {
+
+    padding: 15px 0;
+}
+
+
+.export-copy h2 {
+
+    margin-bottom: 20px;
+
+    font-size: clamp(
+        31px,
+        4vw,
+        48px
+    );
+}
+
+
+.export-copy p {
+
+    max-width: 390px;
+
+    margin: 0 0 28px;
+
+    color: var(--brown);
+
+    font-size: 15px;
+
+    line-height: 1.65;
+}
+
+
+#copyMarkdownButton {
+
+    min-height: 50px;
+
+    padding: 0 20px;
+
+    background: var(--blue);
+
+    color: var(--black);
+
+    border: 2px solid var(--black);
+
+    border-radius: 0;
+
+    font-family: "Space Grotesk", sans-serif;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+
+#copyMarkdownButton:hover {
+
+    transform: translate(-3px, -3px);
+
+    box-shadow: 5px 5px 0 var(--black);
+}
+
+
+/* ============================================================
+   MARKDOWN PREVIEW
+   ============================================================ */
+
+.markdown-preview {
+
+    border: var(--border);
+
+    background: var(--black);
+
+    box-shadow: 6px 6px 0 var(--crimson);
+
+    overflow: hidden;
+}
+
+
+.preview-header {
+
+    height: 43px;
+
+    padding: 0 15px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    background: var(--crimson);
+
+    border-bottom: var(--border);
+}
+
+
+.preview-dot {
+
+    width: 9px;
+
+    height: 9px;
+
+    background: var(--yellow);
+
+    border: 1px solid var(--black);
+
+    border-radius: 50%;
+}
+
+
+.preview-title {
+
+    margin-left: 8px;
+
+    color: var(--paper);
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.5px;
+}
+
+
+#markdownDisplay {
+
+    margin: 0;
+
+    height: 380px;
+
+    overflow: auto;
+
+    padding: 22px;
+
+    color: #f7ead7;
+
+    background: var(--black);
+
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+    font-size: 12px;
+
+    line-height: 1.7;
+
+    white-space: pre-wrap;
+
+    overflow-wrap: anywhere;
+}
+
+
+/* markdown scrollbar */
+
+#markdownDisplay::-webkit-scrollbar {
+
+    width: 10px;
+}
+
+
+#markdownDisplay::-webkit-scrollbar-track {
+
+    background: var(--crimson-deep);
+}
+
+
+#markdownDisplay::-webkit-scrollbar-thumb {
+
+    background: var(--yellow);
+
+    border: 2px solid var(--black);
+}
+
+
+/* ============================================================
+   ERROR
+   ============================================================ */
+
+.error-message {
+
+    padding: 20px;
+
+    background: #ffd6d2;
+
+    color: var(--brown);
+
+    border: 3px solid var(--red);
+
+    font-weight: 700;
+}
+
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+
+.footer {
+
+    min-height: 65px;
+
+    padding: 0 30px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    background: var(--black);
+
+    color: var(--paper);
+
+    font-size: 9px;
+
+    font-weight: 700;
+
+    letter-spacing: 1.5px;
+}
+
+
+/* ============================================================
+   SELECTION
+   ============================================================ */
+
+::selection {
+
+    background: var(--yellow);
+
+    color: var(--black);
+}
+
+
+/* ============================================================
+   RESPONSIVE — TABLET
+   ============================================================ */
+
+@media (max-width: 850px) {
+
+    .container {
+
+        width: calc(100% - 40px);
+
+        margin: 40px auto 70px;
+    }
+
+
+    .container::before,
+    .container::after {
+
+        display: none;
+    }
+
+
+    .hero {
+
+        padding: 42px 35px 38px;
+    }
+
+
+    .hero h1 {
+
+        font-size: 64px;
+
+        letter-spacing: -4px;
+    }
+
+
+    .search-box {
+
+        padding: 28px 35px 32px;
+    }
+
+
+    .status {
+
+        padding-left: 35px;
+
+        padding-right: 35px;
+    }
+
+
+    .card {
+
+        padding: 35px;
+    }
+
+
+    .stats {
+
+        grid-template-columns:
+            1fr 1fr 1fr;
+    }
+
+
+    .export-layout {
+
+        grid-template-columns: 1fr;
+    }
+
+
+    .export-copy p {
+
+        max-width: 650px;
+    }
+}
+
+
+/* ============================================================
+   RESPONSIVE — MOBILE
+   ============================================================ */
+
+@media (max-width: 600px) {
+
+    body {
+
+        background: var(--crimson);
+    }
+
+
+    .container {
+
+        width: calc(100% - 18px);
+
+        margin: 18px auto 45px;
+
+        box-shadow: 5px 5px 0 var(--black);
+    }
+
+
+    .hero {
+
+        padding: 32px 22px 30px;
+    }
+
+
+    .hero h1 {
+
+        font-size: 47px;
+
+        letter-spacing: -2.5px;
+
+        line-height: 0.9;
+    }
+
+
+    .hero .subtitle {
+
+        margin-top: 22px;
+
+        font-size: 14px;
+
+        line-height: 1.55;
+    }
+
+
+    .search-box {
+
+        padding: 20px 22px 24px;
+    }
+
+
+    .search-row {
+
+        flex-direction: column;
+
+        gap: 10px;
+    }
+
+
+    #researchQuery {
+
+        width: 100%;
+
+        height: 60px;
+
+        border-right: var(--border);
+
+        font-size: 15px;
+    }
+
+
+    #researchButton {
+
+        width: 100%;
+
+        height: 60px;
+    }
+
+
+    .status {
+
+        padding: 13px 22px;
+
+        font-size: 12px;
+    }
+
+
+    .stats {
+
+        grid-template-columns: 1fr 1fr;
+    }
+
+
+    .stat-card {
+
+        min-height: 105px;
+
+        padding: 18px;
+    }
+
+
+    .stat-card-wide {
+
+        grid-column: 1 / -1;
+
+        border-right: none;
+
+        border-bottom: var(--border);
+    }
+
+
+    .card {
+
+        padding: 28px 22px;
+    }
+
+
+    .section-topline {
+
+        margin-bottom: 22px;
+    }
+
+
+    .report-heading {
+
+        gap: 14px;
+
+        align-items: flex-start;
+    }
+
+
+    .report-icon {
+
+        width: 48px;
+
+        height: 48px;
+
+        font-size: 20px;
+    }
+
+
+    .report-heading h2,
+    .section-heading-row h2 {
+
+        font-size: 29px;
+
+        letter-spacing: -1.5px;
+    }
+
+
+    .report {
+
+        font-size: 15px;
+
+        line-height: 1.75;
+    }
+
+
+    .report h2 {
+
+        font-size: 19px;
+
+        margin-top: 32px;
+    }
+
+
+    .report li {
+
+        font-size: 14px;
+
+        padding: 12px;
+    }
+
+
+    .section-heading-row {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        gap: 15px;
+    }
+
+
+    .sources-grid {
+
+        grid-template-columns: 1fr;
+    }
+
+
+    .source-card {
+
+        min-height: 135px;
+    }
+
+
+    .export-copy h2 {
+
+        font-size: 34px;
+    }
+
+
+    #markdownDisplay {
+
+        height: 320px;
+    }
+
+
+    .footer {
+
+        padding: 18px 20px;
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 8px;
+    }
+}
